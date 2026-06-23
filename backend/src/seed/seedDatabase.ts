@@ -109,11 +109,11 @@ export async function seedDatabase(clearFirst = false): Promise<void> {
   ]);
 
   for (const q of aptitudeQuestions) {
-    await Question.create({ type: 'aptitude', isActive: true, tags: ['seed'], ...q });
+    await Question.create({ ...q, type: 'aptitude', isActive: true, tags: ['seed'] });
   }
 
   for (const q of technicalQuestions) {
-    await Question.create({ isActive: true, tags: ['seed'], ...q });
+    await Question.create({ ...q, isActive: true, tags: [...(q.tags || []), 'seed'] });
   }
 
   const report = await Report.create({
@@ -156,10 +156,10 @@ export async function ensureSeeded(): Promise<void> {
   if (questionCount === 0) {
     console.log('No questions found — seeding question bank...');
     for (const q of aptitudeQuestions) {
-      await Question.create({ type: 'aptitude', isActive: true, tags: ['seed'], ...q });
+      await Question.create({ ...q, type: 'aptitude', isActive: true, tags: ['seed'] });
     }
     for (const q of technicalQuestions) {
-      await Question.create({ isActive: true, tags: ['seed'], ...q });
+      await Question.create({ ...q, isActive: true, tags: [...(q.tags || []), 'seed'] });
     }
   }
 }

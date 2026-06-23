@@ -11,12 +11,43 @@ import { generalLimiter } from './middleware/rateLimit';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import './controllers/authController';
 
+function getAllowedOrigins(): string[] {
+  const fromEnv = (process.env.FRONTEND_URL || 'http://localhost:5173')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  const extra = (process.env.CORS_ORIGINS || '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+  return [...new Set([...fromEnv, ...extra])];
+}
+
+function isOriginAllowed(origin: string | undefined): boolean {
+  if (!origin) return true;
+
+  const allowed = getAllowedOrigins();
+  if (allowed.includes(origin)) return true;
+
+  if (/^https:\/\/[\w-]+\.vercel\.app$/.test(origin)) return true;
+
+  return false;
+}
+
 const app = express();
 
 app.use(helmet());
 app.use(
   cors({
-    origin: config.frontendUrl,
+    origin(origin, callback) {
+      if (isOriginAllowed(origin)) {
+        callback(null, origin || true);
+      } else {
+        callback(new Error(`CORS blocked for origin: ${origin}`));
+      }
+    },
     credentials: true,
   })
 );

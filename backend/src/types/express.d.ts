@@ -2,9 +2,8 @@ import { IUser } from '../models/User';
 
 declare global {
   namespace Express {
-    interface Request {
-      user?: IUser;
-    }
+    // Passport types default User to {}; extend with our Mongoose user document.
+    interface User extends IUser {}
   }
 }
 

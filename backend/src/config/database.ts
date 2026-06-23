@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import type { MongoMemoryServer } from 'mongodb-memory-server';
 import { config } from './index';
 
-let memoryServer: { stop: () => Promise<boolean> } | null = null;
+let memoryServer: MongoMemoryServer | null = null;
 
 export async function connectDatabase(): Promise<void> {
   let uri = config.mongodbUri;

@@ -66,8 +66,15 @@
 
 3. Environment variables (required for production API calls):
    ```
+   # Use either one (both work):
    VITE_API_URL=https://your-api.onrender.com/api/v1
+   BACKEND_URL=https://your-api.onrender.com
    VITE_GOOGLE_CLIENT_ID=...
+   ```
+
+   On your **backend** (Render), set:
+   ```
+   FRONTEND_URL=https://your-app.vercel.app
    ```
 
 4. **Troubleshooting Vercel build failures:**

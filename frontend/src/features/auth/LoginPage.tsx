@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Brain, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
+import { getApiUrl } from '@/lib/appConfig';
 import { loginSchema, type LoginForm } from '@/lib/validators';
 import { useAuthStore, redirectAfterAuth } from '@/stores/authStore';
 import { Button } from '@/components/ui/Button';
@@ -30,15 +31,29 @@ export default function LoginPage() {
       toast.success('Welcome back!');
       redirectAfterAuth(user.role);
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } };
-      toast.error(error.response?.data?.message || 'Login failed. Try alice@example.com / Password123!');
+      const error = err as {
+        response?: { data?: { message?: string }; status?: number };
+        code?: string;
+        message?: string;
+      };
+
+      if (!error.response) {
+        const apiUrl = getApiUrl();
+        toast.error(
+          `Cannot reach the API server (${apiUrl}). Deploy the backend and set BACKEND_URL or VITE_API_URL on Vercel.`
+        );
+      } else if (error.response.status === 401) {
+        toast.error(error.response.data?.message || 'Invalid email or password');
+      } else {
+        toast.error(error.response.data?.message || 'Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL || '/api/v1'}/auth/google`;
+    window.location.href = `${getApiUrl()}/auth/google`;
   };
 
   return (

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ai-interview-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: USE_MEMORY_DB
+        value: false

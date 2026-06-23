@@ -85,7 +85,8 @@ export const dashboardController = {
   },
 
   async markRead(req: Request, res: Response): Promise<void> {
-    const notification = await markNotificationRead(req.params.id, req.user!._id.toString());
+    const notificationId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const notification = await markNotificationRead(notificationId, req.user!._id.toString());
     res.json({ success: true, data: notification });
   },
 
