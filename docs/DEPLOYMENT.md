@@ -52,16 +52,29 @@
 ## Frontend — Vercel
 
 1. Import project on [vercel.com](https://vercel.com)
-2. Settings:
+2. Settings (choose **one** approach):
+
+   **Option A — Root deploy (recommended, uses `vercel.json` at repo root):**
+   - **Root Directory**: leave as `.` (repository root)
+   - Vercel reads `vercel.json` and builds `frontend/` automatically
+
+   **Option B — Frontend-only deploy:**
    - **Root Directory**: `frontend`
    - **Framework**: Vite
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
-3. Environment variables:
+
+3. Environment variables (required for production API calls):
    ```
    VITE_API_URL=https://your-api.onrender.com/api/v1
    VITE_GOOGLE_CLIENT_ID=...
    ```
+
+4. **Troubleshooting Vercel build failures:**
+   - If install fails at repo root: set **Root Directory** to `frontend` OR push the root `vercel.json` (included in this repo)
+   - Ensure `VITE_API_URL` points to your deployed backend (e.g. Render), not `localhost`
+   - Use **Node.js 20** (`.nvmrc` is included)
+   - Redeploy after adding env vars — Vite bakes `VITE_*` vars at build time
 
 ## Cloudinary Setup
 
