@@ -1,0 +1,16 @@
+{
+  "name": "ai-interview-platform",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:ai": "cd ai-service && python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000",
+    "seed": "npm run seed --prefix backend",
+    "docker:up": "docker-compose up -d",
+    "setup": "npm run install:all && copy backend\\.env.example backend\\.env && copy frontend\\.env.example frontend\\.env && copy ai-service\\.env.example ai-service\\.env"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
