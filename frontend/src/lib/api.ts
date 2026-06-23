@@ -2,10 +2,8 @@ import axios from 'axios';
 import { useAuthStore } from '@/stores/authStore';
 import { getApiUrl } from '@/lib/appConfig';
 
-const API_URL = getApiUrl();
-
 export const api = axios.create({
-  baseURL: API_URL,
+  baseURL: getApiUrl(),
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -45,7 +43,7 @@ api.interceptors.response.use(
 
     try {
       const { data } = await axios.post(
-        `${API_URL}/auth/refresh`,
+        `${getApiUrl()}/auth/refresh`,
         {},
         { withCredentials: true }
       );

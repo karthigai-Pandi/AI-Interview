@@ -42,6 +42,10 @@ export default function LoginPage() {
         toast.error(
           `Cannot reach the API server (${apiUrl}). Deploy the backend and set BACKEND_URL or VITE_API_URL on Vercel.`
         );
+      } else if (error.response.status === 404) {
+        toast.error(
+          `API route not found (${getApiUrl()}/auth/login). Set BACKEND_URL on Vercel to your Render URL (e.g. https://your-app.onrender.com).`
+        );
       } else if (error.response.status === 401) {
         toast.error(error.response.data?.message || 'Invalid email or password');
       } else {
